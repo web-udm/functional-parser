@@ -19,18 +19,18 @@ function getHtml(string $url): string {
     return $html;
 }
 
-function getCrawler(string $html): Crawler {
-    return new Crawler($html);
+function getCrawler(string $url): Crawler {
+    return new Crawler(getHtml($url));
 }
 
-function getMaxPage(Crawler $crawlerOfTopicsListPage): int {
-    return (int) $crawlerOfTopicsListPage->filter('.PageNavNext + a')->text();
+function getMaxPage(string $url): int {
+    return (int) getCrawler($url)->filter('.PageNav nav > a:nth-last-child(2)')->text();
 }
 
 function getForumPagesUrls(string $topicsListUrl): array {
     return array_map(function ($pageNumber) use ($topicsListUrl) {
         return "$topicsListUrl/page-$pageNumber";
-    }, range(1, getMaxPage(getCrawler($topicsListUrl))));
+    }, range(1, getMaxPage(($topicsListUrl))));
 }
 
 function getTopicsUrlsFromForumPage(string $topicsListUrl): array {
@@ -40,7 +40,5 @@ function getTopicsUrlsFromForumPage(string $topicsListUrl): array {
         });
 }
 
-//print_r(getTopicsUrlsFromForumPage('https://php.ru/forum/forums/php-dlja-novichkov.13/'));
 
-$crawler = getCrawler(getHtml('https://php.ru/forum/forums/php-dlja-novichkov.13/'));
-print_r($crawler->html());
+print_r(getMaxPage('https://php.ru/forum/forums/ide.46/'));
