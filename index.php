@@ -40,5 +40,4 @@ function getTopicsUrlsFromForumPage(string $topicsListUrl): array {
         });
 }
 
-
 print_r(getMaxPage('https://php.ru/forum/forums/ide.46/'));
